@@ -20,7 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Documents\Code\LearnOpenGL\glad\src\glad.c" />
-    <ClCompile Include="FileName.cpp" />
+    <ClCompile Include="Amusement.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="suitable.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="3.3.shader.fs" />
+    <None Include="3.3.shader.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
