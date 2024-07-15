@@ -21,16 +21,21 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Documents\Code\LearnOpenGL\glad\src\glad.c" />
     <ClCompile Include="Amusement.cpp" />
+    <ClCompile Include="Dunno.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="suitable.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="3.3.shader.fs" />
-    <None Include="3.3.shader.vs" />
+    <None Include="4.2.texture.fs" />
+    <None Include="4.2.texture.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="container.jpg" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
