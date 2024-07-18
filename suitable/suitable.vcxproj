@@ -31,8 +31,8 @@
     <ResourceCompile Include="suitable.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="4.2.texture.fs" />
-    <None Include="4.2.texture.vs" />
+    <None Include="fragment.glsl" />
+    <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="container.jpg" />

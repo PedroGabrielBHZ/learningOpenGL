@@ -12,8 +12,8 @@ class Shader
 {
 public:
     unsigned int ID;
+
     // constructor generates the shader on the fly
-    // ------------------------------------------------------------------------
     Shader(const char* vertexPath, const char* fragmentPath)
     {
         // 1. retrieve the vertex/fragment source code from filePath
@@ -21,6 +21,7 @@ public:
         std::string fragmentCode;
         std::ifstream vShaderFile;
         std::ifstream fShaderFile;
+
         // ensure ifstream objects can throw exceptions:
         vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -29,13 +30,16 @@ public:
             // open files
             vShaderFile.open(vertexPath);
             fShaderFile.open(fragmentPath);
-            std::stringstream vShaderStream, fShaderStream;
+
             // read file's buffer contents into streams
+            std::stringstream vShaderStream, fShaderStream;
             vShaderStream << vShaderFile.rdbuf();
             fShaderStream << fShaderFile.rdbuf();
+
             // close file handlers
             vShaderFile.close();
             fShaderFile.close();
+            
             // convert stream into string
             vertexCode = vShaderStream.str();
             fragmentCode = fShaderStream.str();
@@ -46,50 +50,188 @@ public:
         }
         const char* vShaderCode = vertexCode.c_str();
         const char* fShaderCode = fragmentCode.c_str();
+
         // 2. compile shaders
         unsigned int vertex, fragment;
+
         // vertex shader
         vertex = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertex, 1, &vShaderCode, NULL);
         glCompileShader(vertex);
         checkCompileErrors(vertex, "VERTEX");
+
         // fragment Shader
         fragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragment, 1, &fShaderCode, NULL);
         glCompileShader(fragment);
         checkCompileErrors(fragment, "FRAGMENT");
+
         // shader Program
         ID = glCreateProgram();
         glAttachShader(ID, vertex);
         glAttachShader(ID, fragment);
         glLinkProgram(ID);
         checkCompileErrors(ID, "PROGRAM");
+
         // delete the shaders as they're linked into our program now and no longer necessary
         glDeleteShader(vertex);
         glDeleteShader(fragment);
     }
-    // activate the shader
-    void use()
+
+    /**
+     * Activates the shader program for use.
+     * This function should be called before rendering objects with this shader.
+     */
+    void activate() const
     {
         glUseProgram(ID);
     }
-    // utility uniform functions
+
+    /**
+     * Sets a boolean uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param value The value to be set for the uniform variable.
+     */
     void setBool(const std::string& name, bool value) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
     }
+
+    /**
+     * Sets an integer uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param value The value to be set for the uniform variable.
+     */
     void setInt(const std::string& name, int value) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
     }
+
+    /**
+     * Sets a float uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param value The value to be set for the uniform variable.
+     */
     void setFloat(const std::string& name, float value) const
     {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
 
+    /**
+     * Sets a vec2 uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param value The value to be set for the uniform variable.
+     */
+    void setVec2(const std::string& name, const glm::vec2& value) const
+    {
+        glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    }
+
+    /**
+     * Sets a vec2 uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param x The x component of the vec2 value.
+     * @param y The y component of the vec2 value.
+     */
+    void setVec2(const std::string& name, float x, float y) const
+    {
+        glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+    }
+
+    /**
+     * Sets a vec3 uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param value The value to be set for the uniform variable.
+     */
+    void setVec3(const std::string& name, const glm::vec3& value) const
+    {
+        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    }
+
+    /**
+     * Sets a vec3 uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param x The x component of the vec3 value.
+     * @param y The y component of the vec3 value.
+     * @param z The z component of the vec3 value.
+     */
+    void setVec3(const std::string& name, float x, float y, float z) const
+    {
+        glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+    }
+
+    /**
+     * Sets a vec4 uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param value The value to be set for the uniform variable.
+     */
+    void setVec4(const std::string& name, const glm::vec4& value) const
+    {
+        glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    }
+
+    /**
+     * Sets a vec4 uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param x The x component of the vec4 value.
+     * @param y The y component of the vec4 value.
+     * @param z The z component of the vec4 value.
+     * @param w The w component of the vec4 value.
+     */
+    void setVec4(const std::string& name, float x, float y, float z, float w) const
+    {
+        glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+    }
+
+    /**
+     * Sets a 2x2 matrix uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param mat The 2x2 matrix value to be set for the uniform variable.
+     */
+    void setMat2(const std::string& name, const glm::mat2& mat) const
+    {
+        glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
+    /**
+     * Sets a 3x3 matrix uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param mat The 3x3 matrix value to be set for the uniform variable.
+     */
+    void setMat3(const std::string& name, const glm::mat3& mat) const
+    {
+        glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
+    /**
+     * Sets a 4x4 matrix uniform variable in the shader program.
+     * 
+     * @param name The name of the uniform variable.
+     * @param mat The 4x4 matrix value to be set for the uniform variable.
+     */
+    void setMat4(const std::string& name, const glm::mat4& mat) const
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
 private:
-    // utility function for checking shader compilation/linking errors.
-    // ------------------------------------------------------------------------
+    /**
+     * Checks for compile errors in the shader.
+     * 
+     * @param shader The shader to check for errors.
+     * @param type The type of shader.
+     */
     void checkCompileErrors(unsigned int shader, std::string type)
     {
         int success;

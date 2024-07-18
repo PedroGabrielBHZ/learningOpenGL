@@ -39,10 +39,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="4.2.texture.fs">
+    <None Include="fragment.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="4.2.texture.vs">
+    <None Include="vertex.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
